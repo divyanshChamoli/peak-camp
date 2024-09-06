@@ -1,9 +1,13 @@
-import { Express, Request, Response } from "express"
+import { Express, request, Request, Response } from "express"
 import { Schema, model, connect } from "mongoose"
+import { Jwt,JsonWebTokenError,JwtHeader,JwtPayload } from "jsonwebtoken"
+import * as jwt from "jsonwebtoken"
 
-const mongoose = import("mongoose")
 const express= require("express")
 const app: Express=express()
+const mongoose = import("mongoose")
+const JWT_SECRET="divyansh_server"
+
 app.use(express.json())
 
 const connectToDB=async ()=>{
@@ -26,17 +30,18 @@ interface Camp{
     //image
 }
 
-const campSchema=new Schema<Camp>({
+const CampSchema=new Schema<Camp>({
     campName:String,
     campDescription:String,
     campLocation:String,
     campPrice: String
 })
 
-const Camp =model<Camp>("Camp",campSchema)
+const Camp =model<Camp>("Camp",CampSchema)
 
 enum HttpStatusCode{
     OK = 200,
+    CREATED = 201,
     BAD_REQUEST = 400,
     UNAUTHORIZED = 401,
     NOT_FOUND = 404,
@@ -85,10 +90,59 @@ app.post('/camp', async (req:Request, res:Response)=>{
             message:"Error"
         })
     }
+})
+
+app.post("/signup",async (req: Request, res: Response)=>{
+    const username=req.body?.username
+    const password=req.body?.password
+    if(!username || !password){
+        res.status(HttpStatusCode.BAD_REQUEST).json({
+            message:"Incorrect/No username and password"
+        })
+        return;
+    }
     
-    res.json({
-        camps:"camps"
-    })
+    const user: User={
+        username: username,
+        password: password
+    }
+    // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWF0IjoxNzI1NjM0NzUwfQ.YG1v_bFC3PgZXXUML_8vsYLbozAQ5n6FPrIak-ABvBY
+    const JWTtoken=jwt.sign({username},JWT_SECRET)
+    try{
+        await User.create({username,password});
+        res.json({
+            message: "User successfully registered",
+            JWTtoken: JWTtoken
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.json({
+            message:"Error"
+        })
+    }
+})
+
+app.post("/signin",async (req:Request, res:Response )=>{
+    const token =req.headers.authorization?.split(' ')[1];
+    if(!token){
+        res.status(HttpStatusCode.UNAUTHORIZED).json({
+            message: "User not authenticated"
+        })
+        return
+    }
+    try{
+        jwt.verify(token,JWT_SECRET)
+        res.json({
+            message: "Signin success"
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.status(HttpStatusCode.UNAUTHORIZED).json({
+            message: "User not authenticated"
+        })
+    }
 })
 
 app.listen(3000,()=>{
