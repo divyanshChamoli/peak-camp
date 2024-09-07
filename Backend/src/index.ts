@@ -6,7 +6,7 @@ import * as jwt from "jsonwebtoken"
 const express= require("express")
 const app: Express=express()
 const mongoose = import("mongoose")
-const JWT_SECRET="divyansh_server"
+export const JWT_SECRET="divyansh_server"
 
 app.use(express.json())
 
@@ -39,7 +39,7 @@ const CampSchema=new Schema<Camp>({
 
 const Camp =model<Camp>("Camp",CampSchema)
 
-enum HttpStatusCode{
+export enum HttpStatusCode{
     OK = 200,
     CREATED = 201,
     BAD_REQUEST = 400,
@@ -124,23 +124,22 @@ app.post("/signup",async (req: Request, res: Response)=>{
 })
 
 app.post("/signin",async (req:Request, res:Response )=>{
-    const token =req.headers.authorization?.split(' ')[1];
-    if(!token){
-        res.status(HttpStatusCode.UNAUTHORIZED).json({
-            message: "User not authenticated"
-        })
-        return
-    }
+    const username=req.body?.username    
+    const password=req.body?.password
+    
     try{
-        jwt.verify(token,JWT_SECRET)
+        await User.findOne({username,password})
+        const JWTtoken=jwt.sign({username},JWT_SECRET)
         res.json({
-            message: "Signin success"
+            message: "Signin successfull",
+            JWTtoken: JWTtoken
         })
     }
+
     catch(err){
         console.log(err)
-        res.status(HttpStatusCode.UNAUTHORIZED).json({
-            message: "User not authenticated"
+        res.status(HttpStatusCode.NOT_FOUND).json({
+            message: "User not found"
         })
     }
 })
