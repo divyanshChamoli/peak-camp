@@ -36,7 +36,8 @@ app.get('/camps',UserAuthenticationMiddleware, async (req:Request, res:Response)
 
 app.post('/camp',UserAuthenticationMiddleware, async (req:Request, res:Response)=>{
     try{
-        await Camp.create(req.body)
+        const campData:Camp =req.body 
+        await Camp.create(req.body as Camp)
         res.json({
             message: "Successfully created Camp"
         })
@@ -59,10 +60,10 @@ app.post("/signup",async (req: Request, res: Response)=>{
         return;
     }
     
-    const user: User={
-        username: username,
-        password: password
-    }
+    // const user: User={
+    //     username: username,
+    //     password: password
+    // }
     // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpdnlhbnNoIiwiaWF0IjoxNzI1NjgyODkwfQ.hJx6aoIVTpGYjFtgHeqV6Grage6AOJThOgSyASI1cBk
     const JWTtoken=jwt.sign({username},JWT_SECRET)
     try{

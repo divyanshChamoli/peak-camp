@@ -14,7 +14,8 @@ export const connectToDB=async ()=>{
 export interface User{
     username: string ,
     password: string,
-    // campsCreated: <Array typeof Ty> 
+    campsCreated: typeof Schema.ObjectId[]
+    reviewsCreated: typeof Schema.ObjectId[]
 }
 
 export interface Camp{
@@ -22,15 +23,19 @@ export interface Camp{
     campDescription: string,
     campLocation: string,
     campPrice: number,
+    reviewsOnCamp: typeof Schema.ObjectId[]
+    user: typeof Schema.ObjectId
     //image
 }
 
 export interface Review{
     reviewText: string,
-    rating: number
+    rating: number,
+    user: typeof Schema.ObjectId,
+    camp: typeof Schema.ObjectId
 }
 
-const UserSchema= new Schema({
+const UserSchema= new Schema<User>({
     username: { type: String, unique:true},
     password: String,
     campsCreated: [{
@@ -43,23 +48,24 @@ const UserSchema= new Schema({
     }]
 })
 
-const CampSchema=new Schema({
+const CampSchema=new Schema<Camp>({
     campName: String,
     campDescription:String,
     campLocation:String,
     campPrice: String,
     reviewsOnCamp:[{
         type: Schema.Types.ObjectId,
-        ref: "Review" 
+        ref: "Review", 
+        required: true
     }],
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
+    },
 })
 
-const ReviewSchema=new Schema({
+const ReviewSchema=new Schema<Review>({
     reviewText: String,
     rating: Number,
     user: {
@@ -74,9 +80,9 @@ const ReviewSchema=new Schema({
     }
 })
 
-export const User = model("User", UserSchema)
-export const Camp = model("Camp", CampSchema)
-export const Review = model("Review", ReviewSchema)
+export const User = model<User>("User", UserSchema)
+export const Camp = model<Camp>("Camp", CampSchema)
+export const Review = model<Review>("Review", ReviewSchema)
 
 
 
