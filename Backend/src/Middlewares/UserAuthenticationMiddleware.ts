@@ -15,9 +15,6 @@ export const UserAuthenticationMiddleware = (req: Request, res: Response, next: 
     const token: string=authorization?.split(' ')[1];
     try{
         jwt.verify(token,JWT_SECRET)
-        res.json({
-            message: "Verified"
-        })
         next()
     }
     catch(err){

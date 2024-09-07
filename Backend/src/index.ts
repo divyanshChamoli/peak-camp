@@ -1,43 +1,14 @@
-import { Express, request, Request, Response } from "express"
-import { Schema, model, connect } from "mongoose"
+import { Express, Request, Response } from "express"
 import { Jwt,JsonWebTokenError,JwtHeader,JwtPayload } from "jsonwebtoken"
 import * as jwt from "jsonwebtoken"
-
+import { UserAuthenticationMiddleware } from "./Middlewares/UserAuthenticationMiddleware"
+import { connectToDB, User, Camp} from "./Database"
 const express= require("express")
 const app: Express=express()
-const mongoose = import("mongoose")
 export const JWT_SECRET="divyansh_server"
 
 app.use(express.json())
-
-const connectToDB=async ()=>{
-    try{
-        (await mongoose).connect("mongodb+srv://divyanshchamoli:wxvn7144@cluster0.qrzriqj.mongodb.net/camping-webapp")
-        console.log("DB connected")
-    }
-    catch(err){
-        console.log("DB not connected",err)
-    }
-}
-
 connectToDB()
-
-interface Camp{
-    campName: string,
-    campDescription: string,
-    campLocation: string,
-    campPrice: number,
-    //image
-}
-
-const CampSchema=new Schema<Camp>({
-    campName:String,
-    campDescription:String,
-    campLocation:String,
-    campPrice: String
-})
-
-const Camp =model<Camp>("Camp",CampSchema)
 
 export enum HttpStatusCode{
     OK = 200,
@@ -48,21 +19,7 @@ export enum HttpStatusCode{
     TOO_MANY_REQUESTS = 429,
 }
 
-interface User{
-    username: string,
-    password: string,
-}
-
-const UserSchema= new Schema<User>({
-    username: String,
-    password: String
-})
-
-const User= model<User>("User",UserSchema)
-
-
-
-app.get('/camps',async (req:Request, res:Response)=>{
+app.get('/camps',UserAuthenticationMiddleware, async (req:Request, res:Response)=>{
     try{
         let camps:Camp[]=await Camp.find({})
         res.json({
@@ -77,7 +34,7 @@ app.get('/camps',async (req:Request, res:Response)=>{
     }
 })
 
-app.post('/camp', async (req:Request, res:Response)=>{
+app.post('/camp',UserAuthenticationMiddleware, async (req:Request, res:Response)=>{
     try{
         await Camp.create(req.body)
         res.json({
@@ -106,7 +63,7 @@ app.post("/signup",async (req: Request, res: Response)=>{
         username: username,
         password: password
     }
-    // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWF0IjoxNzI1NjM0NzUwfQ.YG1v_bFC3PgZXXUML_8vsYLbozAQ5n6FPrIak-ABvBY
+    // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpdnlhbnNoIiwiaWF0IjoxNzI1NjgyODkwfQ.hJx6aoIVTpGYjFtgHeqV6Grage6AOJThOgSyASI1cBk
     const JWTtoken=jwt.sign({username},JWT_SECRET)
     try{
         await User.create({username,password});
@@ -126,9 +83,13 @@ app.post("/signup",async (req: Request, res: Response)=>{
 app.post("/signin",async (req:Request, res:Response )=>{
     const username=req.body?.username    
     const password=req.body?.password
-    
+
     try{
-        await User.findOne({username,password})
+        const foundUser=await User.findOne({username,password})
+        if(!foundUser){
+            throw new Error("User not found")
+        }
+
         const JWTtoken=jwt.sign({username},JWT_SECRET)
         res.json({
             message: "Signin successfull",
