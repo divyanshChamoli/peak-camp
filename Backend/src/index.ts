@@ -1,9 +1,10 @@
 import { Express, Request, Response } from "express"
-import jwt from "jsonwebtoken"
 import { UserAuthenticationMiddleware } from "./Middlewares/UserAuthenticationMiddleware"
 import { connectToDB, User, Camp} from "./Database"
 import { CampBodyValidationMiddleware } from "./Middlewares/CampBodyValidationMiddleware"
 import { LoginCredentialValidationMiddleware } from "./Middlewares/LoginCredentialValidationMiddleware"
+import jwt from "jsonwebtoken"
+
 const express= require("express")
 const app: Express=express()
 export const JWT_SECRET="divyansh_server"
