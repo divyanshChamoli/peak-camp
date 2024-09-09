@@ -1,4 +1,4 @@
-import { Schema, model, connect } from "mongoose"
+import { Schema, model, connect, Types } from "mongoose"
 const mongoose = import("mongoose")
 
 export const connectToDB=async ()=>{
@@ -16,8 +16,8 @@ connectToDB()
 export interface User{
     username: string ,
     password: string,
-    campsCreated: typeof Schema.ObjectId[]
-    reviewsCreated: typeof Schema.ObjectId[]
+    campsCreated:  Types.ObjectId[]
+    reviewsCreated: Types.ObjectId[]
 }
 
 export interface Camp{
@@ -25,16 +25,16 @@ export interface Camp{
     campDescription: string,
     campLocation: string,
     campPrice: number,
-    reviewsOnCamp: typeof Schema.ObjectId[]
-    user: typeof Schema.ObjectId
+    reviewsOnCamp: Types.ObjectId[]
+    user: Types.ObjectId
     //image
 }
 
 export interface Review{
     reviewText: string,
     rating: number,
-    user: typeof Schema.ObjectId,
-    camp: typeof Schema.ObjectId
+    user: Types.ObjectId,
+    camp: Types.ObjectId
 }
 
 const UserSchema= new Schema<User>({
