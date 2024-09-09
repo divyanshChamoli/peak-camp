@@ -5,6 +5,15 @@ import { CampBodyValidationMiddleware } from "../Middlewares/CampBodyValidationM
 const router=Router()
 
 //get all camps
+// 2) Camp
+// create a camp
+// get all camps
+// get a camp "/:campId"
+// get all camps created by that user "/camps/:userId"
+// delete a camp "/:campId" 
+// update a camp "/:campId"
+
+
 router.get('/camps', async (req:Request, res:Response)=>{
     try{
         let camps:Camp[]=await Camp.find({})
