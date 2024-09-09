@@ -1,6 +1,6 @@
 import { NextFunction,Request,Response} from "express";
 import { LoginCredentialSchema } from "../zod";
-import { HttpStatusCode } from "..";
+import { HttpStatusCode } from "../utils";
 
 export const LoginCredentialValidationMiddleware=(req:Request, res:Response, next: NextFunction)=>{
     const loginCredentials=req.body;

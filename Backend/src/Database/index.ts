@@ -11,6 +11,8 @@ export const connectToDB=async ()=>{
     }
 }
 
+connectToDB()
+
 export interface User{
     username: string ,
     password: string,

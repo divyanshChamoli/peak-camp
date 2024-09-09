@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { HttpStatusCode } from "..";
 import jwt from "jsonwebtoken"
-import { JWT_SECRET } from "..";
 import { authorizationHeaderSchema } from "../zod";
+import { JWT_SECRET,HttpStatusCode } from "../utils";
 
 export const UserAuthenticationMiddleware = (req: Request, res: Response, next: NextFunction) :void=>{
     const authorization=req.headers.authorization;

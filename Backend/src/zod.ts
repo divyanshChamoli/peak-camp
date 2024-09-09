@@ -1,6 +1,6 @@
 import z from "zod"
 
-export const authorizationHeaderSchema= z.string().min(8)
+export const authorizationHeaderSchema= z.string()
 
 export const campBodySchema=z.object({
     campName: z.string(),

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { campBodySchema } from "../zod";
-import { HttpStatusCode } from "..";
+import { HttpStatusCode } from "../utils";
 
 export const CampBodyValidationMiddleware=(req: Request, res: Response, next: NextFunction): void=>{
     const campData =req.body 
