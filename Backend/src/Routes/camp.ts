@@ -15,26 +15,10 @@ const router=Router()
 // delete a camp "/:campId" 
 // update a camp "/:campId"
 
-// get all camps
-router.get('/camps', async (req:Request, res:Response)=>{
-    try{
-        let camps:Camp[]=await Camp.find({})
-        res.json({
-            camps:camps
-        })
-    }
-    catch(err){
-        console.log(err)
-        res.json({
-            message:"Error"
-        })
-    }
-})
-
 //create a new camp for a user
-router.post('/:userId',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
-    //user ObjectId from url
-    const userId=req.params.userId;
+router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
+    //user ObjectId from locals
+    const userId=res.locals.userId;
     const campBody: CreateCampBodyType= req.body
     try{
         //body has the first 4 + user + reviewsOnCamp will be empty when the camp is created
@@ -61,6 +45,23 @@ router.post('/:userId',UserAuthenticationMiddleware, CreateCampValidationMiddlew
         })
     }
 })
+
+// get all camps
+router.get('/camps', async (req:Request, res:Response)=>{
+    try{
+        let camps:Camp[]=await Camp.find({})
+        res.json({
+            camps:camps
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.json({
+            message:"Error"
+        })
+    }
+})
+
 
 //get a camp by camp id
 router.get("/:campId",async (req: Request, res: Response)=>{
@@ -115,6 +116,7 @@ router.get(("/camps/:userId"), async (req:Request, res:Response)=>{
 })
 
 //delete a camp
+//can create a CampAuthorizationMiddleware to check if this camp belongs to the user logged in
 router.delete(":campId",UserAuthenticationMiddleware ,async (req: Request, res: Response)=>{
     const campId=req.params.campId;
     try{
@@ -136,6 +138,7 @@ router.delete(":campId",UserAuthenticationMiddleware ,async (req: Request, res: 
 })
 
 //update camp data
+//can create a CampAuthorizationMiddleware to check if this camp belongs to the user logged in
 router.put("/:campId",UserAuthenticationMiddleware, UpdateCampValidationMiddleware ,async (req: Request, res:Response)=>{
     const campId=req.params.campId;
     const campBody: UpdateCampBodyType=req.body

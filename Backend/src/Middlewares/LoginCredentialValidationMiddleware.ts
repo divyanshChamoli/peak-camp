@@ -7,7 +7,7 @@ export const LoginCredentialValidationMiddleware=(req:Request, res:Response, nex
     const result=LoginCredentialSchema.safeParse(loginCredentials)
     if(!result.success){
         res.status(HttpStatusCode.BAD_REQUEST).json({
-            message:"Incorrect/No username and password"
+            message:"Invalid inputs"
         })
         return;
     }

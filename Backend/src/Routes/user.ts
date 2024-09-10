@@ -16,36 +16,31 @@ const router=Router()
 
 //signup user
 router.post("/signup",LoginCredentialValidationMiddleware ,async (req: Request, res: Response)=>{
-    const username=req.body.username
-    const password=req.body.password
+    const {username, password}= req.body
     
-    // const JWTtoken=jwt.sign({username},JWT_SECRET)
     try{
         await User.create({username,password});
         res.json({
             message: "User successfully registered",
-            // JWTtoken: JWTtoken
         })
     }
     catch(err){
         console.log(err)
         res.json({
-            message:"Error"
+            message:"User not registered"
         })
     }
 })
 
 //signin user
 router.post("/signin",LoginCredentialValidationMiddleware,async (req:Request, res:Response )=>{
-    const username=req.body.username    
-    const password=req.body.password
-  
+    const {username, password}=req.body
     try{
         const foundUser=await User.findOne({username,password})
         if(!foundUser){
             throw new Error("User not found")
         }
-        const userId=foundUser._id
+        const userId=foundUser._id.toString()
         const JWTtoken=jwt.sign({userId},JWT_SECRET)
         res.json({
             message: "Signin successfull",
@@ -76,6 +71,8 @@ router.get("/users",async (req: Request, res: Response)=>{
     }
 })
 
+//Should I delete all the camps and reviews too?
+//can check if the user being deleted is the same one logged in/ instead of getting userId from url. use res.locals userId 
 router.delete("/:userId",UserAuthenticationMiddleware,async (req: Request, res:Response)=>{
     const userId=req.params.userId;
     try{

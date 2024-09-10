@@ -7,7 +7,7 @@ export const CreateReviewBodyValidationMiddleware=(req: Request, res: Response, 
     const result=CreateReviewBodySchema.safeParse(reviewData);
     if(!result.success){
         res.status(HttpStatusCode.BAD_REQUEST).json({
-            message: "Error"
+            message: "Invalid inputs"
         })
         return;
     }

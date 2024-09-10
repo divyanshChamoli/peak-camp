@@ -7,7 +7,7 @@ export const UpdateCampValidationMiddleware=(req: Request, res: Response, next: 
     const result=UpdateCampBodySchema.safeParse(campData);
     if(!result.success){
         res.status(HttpStatusCode.BAD_REQUEST).json({
-            message: "Error"
+            message: "Invalid inputs"
         })
         return;
     }
