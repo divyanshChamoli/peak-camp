@@ -15,7 +15,7 @@ const router=Router()
 // delete a camp "/:campId" 
 // update a camp "/:campId"
 
-
+// get all camps
 router.get('/camps', async (req:Request, res:Response)=>{
     try{
         let camps:Camp[]=await Camp.find({})
@@ -32,7 +32,7 @@ router.get('/camps', async (req:Request, res:Response)=>{
 })
 
 //create a new camp for a user
-router.post('/camp/:userId',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
+router.post('/:userId',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
     //user ObjectId from url
     const userId=req.params.userId;
     const campBody: CreateCampBodyType= req.body
@@ -114,6 +114,7 @@ router.get(("/camps/:userId"), async (req:Request, res:Response)=>{
     }
 })
 
+//delete a camp
 router.delete(":campId",UserAuthenticationMiddleware ,async (req: Request, res: Response)=>{
     const campId=req.params.campId;
     try{

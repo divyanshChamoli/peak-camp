@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express"
-import jwt from "jsonwebtoken"
+import jwt, { JwtHeader } from "jsonwebtoken"
 import { authorizationHeaderSchema } from "../zod";
 import { JWT_SECRET,HttpStatusCode } from "../utils";
+import {jwtDecode} from "jwt-decode"
+
+interface CustomJwtHeader extends JwtHeader{
+    userId?: string
+}
 
 export const UserAuthenticationMiddleware = (req: Request, res: Response, next: NextFunction) :void=>{
     const authorization=req.headers.authorization;
@@ -15,6 +20,9 @@ export const UserAuthenticationMiddleware = (req: Request, res: Response, next: 
     const token=authorization.split(' ')[1];
     try{
         jwt.verify(token,JWT_SECRET)
+        const payload=jwtDecode<CustomJwtHeader>(token, {header:true})
+        const userId=payload.userId
+        req.userId=userId
         next()
     }
     catch(err){

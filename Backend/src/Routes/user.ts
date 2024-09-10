@@ -19,12 +19,12 @@ router.post("/signup",LoginCredentialValidationMiddleware ,async (req: Request, 
     const username=req.body.username
     const password=req.body.password
     
-    const JWTtoken=jwt.sign({username},JWT_SECRET)
+    // const JWTtoken=jwt.sign({username},JWT_SECRET)
     try{
         await User.create({username,password});
         res.json({
             message: "User successfully registered",
-            JWTtoken: JWTtoken
+            // JWTtoken: JWTtoken
         })
     }
     catch(err){
@@ -45,7 +45,8 @@ router.post("/signin",LoginCredentialValidationMiddleware,async (req:Request, re
         if(!foundUser){
             throw new Error("User not found")
         }
-        const JWTtoken=jwt.sign({username},JWT_SECRET)
+        const userId=foundUser._id
+        const JWTtoken=jwt.sign({userId},JWT_SECRET)
         res.json({
             message: "Signin successfull",
             JWTtoken: JWTtoken

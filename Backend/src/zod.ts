@@ -14,6 +14,12 @@ export const UpdateCampBodySchema=CreateCampBodySchema.partial()
 export type CreateCampBodyType=z.infer<typeof CreateCampBodySchema> 
 export type UpdateCampBodyType=z.infer<typeof UpdateCampBodySchema>
 
+export const CreateReviewBodySchema=z.object({
+    reviewText: z.string(),
+    rating: z.number()
+})
+
+export type CreateReviewBodyType=z.infer<typeof CreateReviewBodySchema> 
 
 export const LoginCredentialSchema=z.object({
     username: z.string(),

@@ -7,9 +7,9 @@ const reviewRouter=require("./Routes/review")
 
 const app: Express=express()
 app.use(express.json())
-app.use("/",campRouter)
-app.use("/",userRouter)
-app.use("/",reviewRouter)
+app.use("/camp",campRouter)
+app.use("/user",userRouter)
+app.use("/review",reviewRouter)
 
 
 app.listen(3000,()=>{
