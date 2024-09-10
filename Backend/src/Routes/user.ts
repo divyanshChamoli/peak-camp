@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
 import { LoginCredentialValidationMiddleware } from "../Middlewares/LoginCredentialValidationMiddleware";
-import jwt from "jsonwebtoken"
 import { User } from "../Database";
 import { HttpStatusCode, JWT_SECRET } from "../utils";
 import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationMiddleware";
-
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 const router=Router()
 // 1) User
 // create a user/ signup 
@@ -17,9 +17,10 @@ const router=Router()
 //signup user
 router.post("/signup",LoginCredentialValidationMiddleware ,async (req: Request, res: Response)=>{
     const {username, password}= req.body
-    
     try{
-        await User.create({username,password});
+        const saltRounds=10
+        const hashedPassword=await bcrypt.hash(password,saltRounds);
+        await User.create({username,password: hashedPassword});
         res.json({
             message: "User successfully registered",
         })
@@ -36,9 +37,14 @@ router.post("/signup",LoginCredentialValidationMiddleware ,async (req: Request, 
 router.post("/signin",LoginCredentialValidationMiddleware,async (req:Request, res:Response )=>{
     const {username, password}=req.body
     try{
-        const foundUser=await User.findOne({username,password})
+        const foundUser=await User.findOne({username})
         if(!foundUser){
             throw new Error("User not found")
+        }
+        const hashedPassword=foundUser.password;
+        const match=await bcrypt.compare(password,hashedPassword)
+        if(!match){
+            throw new Error("User password is incorrect")
         }
         const userId=foundUser._id.toString()
         const JWTtoken=jwt.sign({userId},JWT_SECRET)
