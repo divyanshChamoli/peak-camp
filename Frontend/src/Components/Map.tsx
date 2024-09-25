@@ -1,9 +1,8 @@
 
-
-export default function Prompt(){
+export default function Map(){
     return(
         <div>
-
+            
         </div>
     )
 }

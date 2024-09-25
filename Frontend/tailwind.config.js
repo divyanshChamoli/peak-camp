@@ -14,7 +14,11 @@ export default {
         orange: "#FFC007",
       },
       fontFamily:{
-        'sriracha': ["Sriracha", "sans-serif"]
+        'sriracha': ["Sriracha", "sans-serif"],
+        'montserrat': ["Montserrat", "sans-serif"]
+      },
+      backgroundImage:{
+        'sign-up': "url('https://sso.koa.com/images/login-background-image.jpg')"
       }
 
     },
