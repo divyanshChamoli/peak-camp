@@ -2,7 +2,7 @@ import { Router, Request,Response } from "express";
 import { CreateReviewBodyValidationMiddleware } from "../Middlewares/CreateReviewBodyValidationMiddleware";
 import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationMiddleware";
 import { CreateReviewBodyType, UpdateReviewBodyType } from "../zod";
-import { Camp, Review, User } from "../Database";
+import { Camp, Review, User } from "../db";
 import { UpdateReviewValidationMiddleware } from "../Middlewares/UpdateReviewValidationMiddleware";
 const router=Router();
 

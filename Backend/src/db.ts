@@ -15,6 +15,8 @@ connectToDB()
 
 export interface User{
     username: string ,
+    firstName: string ,
+    lastName: string ,
     password: string,
     campsCreated:  Types.ObjectId[]
     reviewsCreated: Types.ObjectId[]
@@ -38,8 +40,30 @@ export interface Review{
 }
 
 const UserSchema= new Schema<User>({
-    username: { type: String, unique:true},
-    password: String,
+    username: { 
+        type: String,
+        unique: true,
+        required: true,
+        trim: true,
+        maxlength: 50
+    },
+    firstName: { 
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 50
+    },
+    lastName: { 
+        type: String,
+        required: true,
+        trim: true,
+        maxlength: 50
+    },
+    password: { 
+        type: String,
+        required: true,
+        minlength: 6
+    },
     campsCreated: [{
         type: Schema.Types.ObjectId,
         ref: "Camp"
@@ -51,14 +75,28 @@ const UserSchema= new Schema<User>({
 })
 
 const CampSchema=new Schema<Camp>({
-    campName: String,
-    campDescription:String,
-    campLocation:String,
-    campPrice: String,
+    campName: { 
+        type: String,
+        required: true,
+        trim: true,
+    },
+    campDescription:{ 
+        type: String,
+        required: true,
+        trim: true
+    },
+    campLocation:{ 
+        type: String,
+        required: true,
+        trim: true
+    },
+    campPrice: { 
+        type: Number,
+        required: true,
+    },
     reviewsOnCamp:[{
         type: Schema.Types.ObjectId,
         ref: "Review", 
-        required: true
     }],
     user: {
         type: Schema.Types.ObjectId,
@@ -68,8 +106,15 @@ const CampSchema=new Schema<Camp>({
 })
 
 const ReviewSchema=new Schema<Review>({
-    reviewText: String,
-    rating: Number,
+    reviewText: { 
+        type: String,
+        required: true,
+        trim: true
+    },
+    rating: { 
+        type: Number,
+        required: true,
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",

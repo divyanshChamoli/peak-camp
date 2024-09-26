@@ -1,13 +1,18 @@
 import z from "zod"
 
-export const AuthorizationHeaderSchema= z.string()
-
-export const LoginCredentialSchema=z.object({
-    username: z.string(),
+export const SignupBodySchema=z.object({
+    firstName: z.string(),
+    lastName: z.string(),
+    username: z.string().email(),
     password: z.string().min(6)
 })
 
-export const CreateCampBodySchema=z.object({
+export const SigninBodySchema=z.object({
+    username: z.string().email(),
+    password: z.string().min(6)
+})
+
+export const CreateCampBodySchema=z.object({    
     campName: z.string(),
     campDescription: z.string(),
     campLocation: z.string(),

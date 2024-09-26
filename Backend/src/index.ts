@@ -1,11 +1,13 @@
-const express= require("express")
 import { Express } from "express"
+const express= require("express")
+const cors=require("cors")
 
 const campRouter=require("./Routes/camp")
 const userRouter=require("./Routes/user")
 const reviewRouter=require("./Routes/review")
 
 const app: Express=express()
+app.use(cors())
 app.use(express.json())
 app.use("/camp",campRouter)
 app.use("/user",userRouter)

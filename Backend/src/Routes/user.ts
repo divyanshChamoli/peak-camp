@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
-import { LoginCredentialValidationMiddleware } from "../Middlewares/LoginCredentialValidationMiddleware";
-import { User } from "../Database";
+import { User } from "../db";
 import { HttpStatusCode, JWT_SECRET } from "../utils";
 import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationMiddleware";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import { SignupBodyValidationMiddleware } from "../Middlewares/SignupBodyValidationMiddleware";
+import { SigninBodyValidationMiddleware } from "../Middlewares/SigninBodyValidationMiddleware";
 const router=Router()
 // 1) User
 // create a user/ signup 
@@ -15,26 +16,29 @@ const router=Router()
 
 
 //signup user
-router.post("/signup",LoginCredentialValidationMiddleware ,async (req: Request, res: Response)=>{
-    const {username, password}= req.body
+router.post("/signup",SignupBodyValidationMiddleware ,async (req: Request, res: Response)=>{
+    const {username, password , firstName, lastName }= req.body
     try{
         const saltRounds=10
         const hashedPassword=await bcrypt.hash(password,saltRounds);
-        await User.create({username,password: hashedPassword});
+        const user=await User.create({username,password: hashedPassword, firstName, lastName});
+        if(!user){
+            throw new Error("User was not registered")
+        }
         res.json({
             message: "User successfully registered",
-        })
+        })  
     }
-    catch(err){
-        console.log(err)
+    catch(e){
+        console.log(e)
         res.json({
-            message:"User not registered"
+            Error : "User can't be registered"
         })
     }
 })
 
 //signin user
-router.post("/signin",LoginCredentialValidationMiddleware,async (req:Request, res:Response )=>{
+router.post("/signin",SigninBodyValidationMiddleware,async (req:Request, res:Response )=>{
     const {username, password}=req.body
     try{
         const foundUser=await User.findOne({username})
@@ -50,14 +54,14 @@ router.post("/signin",LoginCredentialValidationMiddleware,async (req:Request, re
         const JWTtoken=jwt.sign({userId},JWT_SECRET)
         res.json({
             message: "Signin successfull",
-            JWTtoken: JWTtoken
+            token: JWTtoken
         })
     }
 
     catch(err){
         console.log(err)
         res.status(HttpStatusCode.NOT_FOUND).json({
-            message: "User not found"
+            Error: "User not found"
         })
     }
 })

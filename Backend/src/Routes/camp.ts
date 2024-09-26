@@ -1,5 +1,5 @@
 import { Router,Request,Response } from "express";
-import { Camp, User } from "../Database";
+import { Camp, User } from "../db";
 import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationMiddleware";
 import { CreateCampValidationMiddleware } from "../Middlewares/CreateCampValidationMiddleware";
 import { UpdateCampValidationMiddleware } from "../Middlewares/UpdateCampValidationMiddleware";
@@ -22,7 +22,7 @@ router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, as
     const campBody: CreateCampBodyType= req.body
     try{
         //body has the first 4 + user + reviewsOnCamp will be empty when the camp is created
-        const camp= await Camp.create({...campBody, user:userId, reviewsOnCamp: []})
+        const camp= await Camp.create({...campBody, user:userId})
         if(!camp){
             console.log("Camp not created")
             throw new Error("Camp not created")
@@ -41,7 +41,7 @@ router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, as
     catch(err){
         console.log(err)
         res.json({
-            message:"Error"
+            Error :"Error"
         })
     }
 })

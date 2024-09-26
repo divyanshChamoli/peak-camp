@@ -1,14 +1,12 @@
 import { Request, Response, NextFunction } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { AuthorizationHeaderSchema } from "../zod";
 import { JWT_SECRET,HttpStatusCode } from "../utils";
 
 export const UserAuthenticationMiddleware = (req: Request, res: Response, next: NextFunction) :void=>{
     const authorization=req.headers.authorization;
-    const result=AuthorizationHeaderSchema.safeParse(authorization)
-    if(!result.success || !authorization){
+    if(!authorization || !authorization.startsWith("Bearer ")){
         res.status(HttpStatusCode.UNAUTHORIZED).json({
-            message: "User not logged in"
+            Error: "User not logged in"
         })
         return;
     }
