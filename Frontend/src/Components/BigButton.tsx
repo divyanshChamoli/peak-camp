@@ -6,6 +6,6 @@ interface BigButton{
 
 export default function BigButton({label, onClick}: BigButton){
     return(
-        <button className="w-full text-white bg-secondary p-1 my-2 text-lg" onClick={onClick}>{label}</button>
+        <button className="w-full text-white bg-secondary p-1 my-2 text-lg hover:bg-[#956B2F] transition-colors" onClick={onClick}>{label}</button>
     )
 }

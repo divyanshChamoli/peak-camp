@@ -1,12 +1,15 @@
-import SmallButton from "../Components/SmallButton";
-import BigButton from "../Components/BigButton";
 import Heading from "../Components/Heading";
 import InputBox from "../Components/InputBox";
 import TextArea from "../Components/TextArea";
 import { useState } from "react";
 import axios from "axios";
+import Button from "../Components/Button";
+import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateCampground(){
+    const navigate=useNavigate()
+    
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
     const [price, setPrice] = useState(0)
@@ -43,8 +46,12 @@ export default function CreateCampground(){
                     <InputBox label="Price" placeholder="Price in INR" type="number" value={price} onChange={e=>setPrice(parseInt(e.target.value))} />
                     <InputBox label="Image Url" placeholder="Paste the website url of the image here" value={imageUrl} onChange={e=>setImageUrl(e.target.value)} />
                     <TextArea label="Description" placeholder="Share your experience!" rows={2} value={description} onChange={e=>setDescription(e.target.value)} />
-                    <BigButton label="Add Campground!" onClick={onClick}/>
-                    <SmallButton/>
+                    <Button className="w-full rounded-sm mb-3 text-lg" size={"icon"} onClick={onClick}>
+                        Add Campground!
+                    </Button>
+                    <Button size={"iconSmall"} onClick={()=>navigate("/home")}>
+                        <ChevronLeft size={15}/> Back
+                    </Button>
                 </div>
             </div>
         </div>     

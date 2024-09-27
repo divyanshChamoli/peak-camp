@@ -1,6 +1,6 @@
 
 interface TextArea{
-    label: string,
+    label?: string,
     placeholder: string,
     rows: number,
     value: string,
