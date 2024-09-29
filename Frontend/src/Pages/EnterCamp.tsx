@@ -5,6 +5,7 @@ import EnterCampCard from "../Components/EnterCampCard";
 // import CampgroundCard from "../Components/CampgroundCard";
 import Map from "../Components/Map";
 import Button from "../Components/Button";
+import NavBar from "../Components/Navbar";
 
 type RouteParams = {
     campId : string
@@ -33,16 +34,21 @@ export default function EnterCamp(){
         // </div>
 
         // DONT DELETE FOR NOW!!!
-        <div className="w-screen flex justify-center pt-40 ">
-            <div className="w-2/3 grid grid-cols-3 gap-8">
-                <div className="bg-primary rounded-sm col-span-2">
-                    <EnterCampCard campId={campId} />
-                </div>
-                <div className=" bg-[#E5E3DF] rounded-sm col-span-1 flex justify-center items-center h-[30rem] border-white shadow-md" >
-                    <Map/>
-                </div>
-                <div className="col-span-2">
-                    <AllReviews campId={campId} /> 
+        <div className=" overflow-x-hidden ">
+            <div className="static w-full">
+                <NavBar/>
+            </div>
+            <div className="w-screen flex justify-center pt-20 bg-customYellow">
+                <div className="w-2/3 grid grid-cols-3 gap-8">
+                    <div className="bg-primary col-span-2 shadow-md shadow-black rounded-md">
+                        <EnterCampCard campId={campId} />
+                    </div>
+                    <div className=" bg-[#E5E3DF] rounded-sm col-span-1 flex justify-center items-center h-[20rem] border-white shadow-md object-cover" >
+                        <Map/>
+                    </div>
+                    <div className="col-span-2 shadow-md shadow-black rounded-md mb-8">
+                        <AllReviews campId={campId} /> 
+                    </div>
                 </div>
             </div>
         </div>

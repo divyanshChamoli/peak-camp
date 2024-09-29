@@ -25,13 +25,13 @@ export default function EnterCampCard( {campId} : EnterCampCardProps){
         async function getData(){
             const response=await axios.get( `http://localhost:3000/camp/${campId}`)
             setCamp(response.data.camp)
-            const res=await axios.get(`http://localhost:3000/user/${camp?.user}`)
-            setFirstName(res.data.firstName)
+            const res=await axios.get(`http://localhost:3000/user/${response.data.camp.user}`)
+                setFirstName(res.data.user.firstName)
         }
 
         getData()
 
-    },[firstName])
+    },[])
 
     
     return(
@@ -41,7 +41,7 @@ export default function EnterCampCard( {campId} : EnterCampCardProps){
                 <figcaption className=" text-white text-xl text-right font-montserrat pt-2"> ₹{camp?.campPrice}/night </figcaption>
                 <figcaption className="font-sriracha text-3xl text-white"> {camp?.campName} </figcaption>
                 <figcaption className="text-white bg-secondary p-4 my-4 text-sm"> {camp?.campDescription} </figcaption>
-                <figcaption className=" text-white text-sm text-right"> Submitted by <span className="underline">{firstName}</span> </figcaption>
+                <figcaption className=" text-white text-sm text-right"> Submitted by <span className="underline capitalize  ">{firstName}</span> </figcaption>
             </figure>
         </div>
     )

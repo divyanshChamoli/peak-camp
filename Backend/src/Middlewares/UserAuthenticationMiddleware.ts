@@ -18,7 +18,7 @@ export const UserAuthenticationMiddleware = (req: Request, res: Response, next: 
     }
     catch(err){
         res.status(HttpStatusCode.UNAUTHORIZED).json({
-            message: "User not logged in"
+            Error: "User not logged in"
         })
         return;
     }  

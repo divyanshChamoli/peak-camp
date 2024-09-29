@@ -66,6 +66,12 @@ router.post("/signin",SigninBodyValidationMiddleware,async (req:Request, res:Res
     }
 })
 
+router.get("/authenticate",UserAuthenticationMiddleware ,async (req: Request, res: Response)=>{
+    res.json({
+        message: "Authenticated"
+    })
+})
+
 router.get("/users",async (req: Request, res: Response)=>{
     try{
         const users: User[]=await User.find({});
@@ -90,7 +96,7 @@ router.get("/:userId",async (req: Request, res: Response)=>{
             throw new Error("User doesnt exist!")
         }
         res.json({
-            firstName: user.firstName 
+            user: user 
         })
     }
     catch(err){

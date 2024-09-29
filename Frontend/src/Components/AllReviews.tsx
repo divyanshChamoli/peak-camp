@@ -4,7 +4,7 @@ import Review from "./Review";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { Rating } from "@material-tailwind/react";
+import DisplayAverageRating from "./DisplayAverageRating";
 
 interface AllReviewsProps{
     campId: string
@@ -18,6 +18,8 @@ interface Review{
     camp: string
 }
 
+
+// Repeated logic for displaying rating using <DisplayAverageRating> and calculating average variable. OPTIMISE!    
 export default function AllReviews({campId} : AllReviewsProps){
     const navigate= useNavigate()
     
@@ -43,14 +45,13 @@ export default function AllReviews({campId} : AllReviewsProps){
         })
     },[])
 
-
-    // const average= useMemo(()=>calculateAverageRating(reviews),[reviews]) 
     
     const average= calculateAverageRating(reviews)
 
+    console.log(campId)
     return( 
         <div className="bg-primary p-3">
-            {/* <Rating value={average} readonly/> */}
+            <DisplayAverageRating campId={campId} />
             <div>{reviews.length} reviews</div>
             <div>Average Rating: <b> {average} </b></div>
             <div className="flex w-full justify-end">
@@ -64,7 +65,7 @@ export default function AllReviews({campId} : AllReviewsProps){
             <hr className="pb-2"/>
             {reviews.map((review)=>{
                 return(
-                    <Review key={review._id} rating={review.rating} reviewText={review.reviewText} />
+                    <Review key={review._id} rating={review.rating} reviewText={review.reviewText} userId={review.user} />
                 )
             })}
         </div>

@@ -10,14 +10,13 @@ import UpdateProfile from "./Pages/UpdateProfile"
 import CreateCampground from "./Pages/CreateCampground"
 import EnterCamp from "./Pages/EnterCamp"
 import CreateReview from "./Pages/CreateReview"
-import NavBar from "./Components/Navbar"
+
 
 function App() {  
 
   return (
-    <div className=" ">
-      <BrowserRouter>
-        {/* <NavBar/> */}
+    <div className="bg=[#FAEDCD]">
+    <BrowserRouter>
         <Routes>
           <Route path="/" element={<IntroductionPage/>}/>
           <Route path="/home" element={<HomePage/>}/>
@@ -30,6 +29,7 @@ function App() {
           <Route path="/createcamp" element={<CreateCampground/>}/>
           <Route path="/entercamp/:campId" element={<EnterCamp/>}/>
           <Route path="/createreview/:campId" element={<CreateReview/>}/>
+
         </Routes>
       </BrowserRouter>      
     </div>

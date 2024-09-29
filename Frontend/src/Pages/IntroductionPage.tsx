@@ -8,9 +8,11 @@ export default function IntroductionPage(){
     
     return(
         <div>
+            <div className="absolute">
+                <Logo /> 
+            </div>
             <div className=" w-screen h-screen flex ">
             {/* <div className=" w-screen h-screen grid grid-flow-col md:grid-cols-2"> */}
-                <Logo/> 
                 <div className="flex justify-center items-center bg-secondary md:flex-shrink-0 ">
                     <div className="flex flex-col gap-3 md:w-[51%] w-4/5">
                         <h2 className="text-5xl font-bold text-green-900 ">Explore the peak camps on Earth!</h2>
