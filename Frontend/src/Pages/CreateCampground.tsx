@@ -23,7 +23,7 @@ export default function CreateCampground(){
                 campDescription: description,
                 campLocation: location,
                 campPrice: price,
-                // imageUrl ??
+                campImageUrl: imageUrl
             },{
                 headers:{
                     Authorization: "Bearer " + localStorage.getItem("token")
@@ -34,6 +34,11 @@ export default function CreateCampground(){
         catch(e){
             console.log(e)
         }
+        setDescription("")
+        setName("")
+        setLocation("")
+        setPrice(0)
+        setImageUrl("")
     }
     
     return(

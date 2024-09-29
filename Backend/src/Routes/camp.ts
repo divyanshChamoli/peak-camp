@@ -47,7 +47,7 @@ router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, as
 })
 
 // get all camps
-router.get('/camps', async (req:Request, res:Response)=>{
+router.get('/', async (req:Request, res:Response)=>{
     try{
         let camps:Camp[]=await Camp.find({})
         res.json({

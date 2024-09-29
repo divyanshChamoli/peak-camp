@@ -43,7 +43,7 @@ router.post("/:campId",UserAuthenticationMiddleware ,CreateReviewBodyValidationM
 })
 
 //get all reviews on a camp 
-router.get("/reviews/:campId",async (req: Request, res: Response)=>{
+router.get("/:campId",async (req: Request, res: Response)=>{
     const campId=req.params.campId;
     try{
         const reviews= await Review.find({camp: campId})

@@ -81,7 +81,27 @@ router.get("/users",async (req: Request, res: Response)=>{
     }
 })
 
-//Should I delete all the camps and reviews too?
+router.get("/:userId",async (req: Request, res: Response)=>{
+    const userId=req.params.userId
+    console.log(userId)
+    try{
+        const user=await User.findById(userId);
+        if(!user){
+            throw new Error("User doesnt exist!")
+        }
+        res.json({
+            firstName: user.firstName 
+        })
+    }
+    catch(err){
+        console.log(err)
+        res.json({
+            Error: err
+        })
+    }
+})
+
+//Should I delete all the camps and reviews too?    
 //can check if the user being deleted is the same one logged in/ instead of getting userId from url. use res.locals userId 
 router.delete("/:userId",UserAuthenticationMiddleware,async (req: Request, res:Response)=>{
     const userId=req.params.userId;

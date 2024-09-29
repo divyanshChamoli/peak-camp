@@ -1,9 +1,9 @@
-import BigButton from "../Components/BigButton";
+import BigButton from "../Components/Button/BigButton";
 import Button from "../Components/Button";
-import ButtonCreateAccount from "../Components/ButtonCreateAccount";
-import ButtonRightIcon from "../Components/ButtonRightIcon";
-import SmallButton from "../Components/SmallButton";
-import TransparentButton from "../Components/TransparentButton";
+import ButtonCreateAccount from "../Components/Button/ButtonCreateAccount";
+import ButtonRightIcon from "../Components/Button/ButtonRightIcon";
+import SmallButton from "../Components/Button/SmallButton";
+import TransparentButton from "../Components/Button/TransparentButton";
 import { Map, Pencil } from "lucide-react";
 
 export default function ErrorPage(){

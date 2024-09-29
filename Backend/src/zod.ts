@@ -17,6 +17,7 @@ export const CreateCampBodySchema=z.object({
     campDescription: z.string(),
     campLocation: z.string(),
     campPrice: z.number(),
+    campImageUrl: z.string().url()
 })
 
 export const UpdateCampBodySchema=CreateCampBodySchema.partial()

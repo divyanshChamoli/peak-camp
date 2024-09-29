@@ -27,6 +27,7 @@ export interface Camp{
     campDescription: string,
     campLocation: string,
     campPrice: number,
+    campImageUrl: string,
     reviewsOnCamp: Types.ObjectId[]
     user: Types.ObjectId
     //image
@@ -93,6 +94,11 @@ const CampSchema=new Schema<Camp>({
     campPrice: { 
         type: Number,
         required: true,
+    },
+    campImageUrl: { 
+        type: String,
+        required: true,
+        trim: true
     },
     reviewsOnCamp:[{
         type: Schema.Types.ObjectId,

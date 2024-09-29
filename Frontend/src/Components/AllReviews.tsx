@@ -1,19 +1,60 @@
 import { Pencil } from "lucide-react";
 import Button from "./Button";
-// import RatingStar from "./RatingStar";
 import Review from "./Review";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import { Rating } from "@material-tailwind/react";
 
-export default function AllReviews(){
+interface AllReviewsProps{
+    campId: string
+}
+
+interface Review{
+    _id: string
+    reviewText: string,
+    rating: number,
+    user: string,
+    camp: string
+}
+
+export default function AllReviews({campId} : AllReviewsProps){
     const navigate= useNavigate()
     
-    return(
+    const [reviews, setReviews] = useState<Review[]>([])
+    
+    const calculateAverageRating=(reviews: Review[]): number=>{
+        if(reviews.length==0){
+            return 4
+        }
+        let total=0
+        for(let review of reviews){
+            total+=review.rating
+        }
+        let avg = total/(reviews.length)
+        let strAvg= avg.toString().substring(0,4)
+        return parseFloat(strAvg)
+    }
+    
+    useEffect(()=>{
+        axios.get(`http://localhost:3000/review/${campId}`)
+        .then((res)=>{
+            setReviews(res.data.reviews)
+        })
+    },[])
+
+
+    // const average= useMemo(()=>calculateAverageRating(reviews),[reviews]) 
+    
+    const average= calculateAverageRating(reviews)
+
+    return( 
         <div className="bg-primary p-3">
-            {/* <RatingStar/> */}
-            <div>3 reviews</div>
-            <div>Average Rating: <b>3.67</b></div>
+            {/* <Rating value={average} readonly/> */}
+            <div>{reviews.length} reviews</div>
+            <div>Average Rating: <b> {average} </b></div>
             <div className="flex w-full justify-end">
-                <Button size={"icon"} onClick={()=>navigate("/createreview")} >
+                <Button size={"icon"} onClick={()=>navigate(`/createreview/${campId}`)} >
                     Add Review<Pencil size={18} fill="white" color="#AC7D36"/>
                 </Button>
             </div>
@@ -21,10 +62,11 @@ export default function AllReviews(){
                     Recent Reviews:
             </div>
             <hr className="pb-2"/>
-            <Review/>
-            <Review/>
-            <Review/>
-            <Review/>
+            {reviews.map((review)=>{
+                return(
+                    <Review key={review._id} rating={review.rating} reviewText={review.reviewText} />
+                )
+            })}
         </div>
     )
 }

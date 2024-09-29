@@ -1,6 +1,6 @@
 import InputBoxSquare from "../Components/InputBoxSquare";
 import { NavLink } from "react-router-dom";
-import ButtonCreateAccount from "../Components/ButtonCreateAccount";
+import ButtonCreateAccount from "../Components/Button/ButtonCreateAccount";
 import { useState } from "react";
 import axios from "axios";
 
