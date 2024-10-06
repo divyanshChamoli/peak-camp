@@ -4,6 +4,11 @@ import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationM
 import { CreateCampValidationMiddleware } from "../Middlewares/CreateCampValidationMiddleware";
 import { UpdateCampValidationMiddleware } from "../Middlewares/UpdateCampValidationMiddleware";
 import { CreateCampBodyType, UpdateCampBodyType } from "../zod";
+import Geocoding from "@mapbox/mapbox-sdk/services/geocoding";
+const mapBoxAccessToken = "pk.eyJ1IjoiZGl2eWFuc2gwMDgiLCJhIjoiY2xnMmtrNm50MDBlajNscXlmbTJzdHl1MCJ9.-UvFiDZ4Z83OYJ9y3mZYew"
+const geocoder = Geocoding({accessToken: mapBoxAccessToken})
+
+
 const router=Router()
 
 //get all camps
@@ -15,14 +20,31 @@ const router=Router()
 // delete a camp "/:campId" 
 // update a camp "/:campId"
 
+// //create a new camp for a user
+// router.post('/', CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
+//     const geoData=await geocoder.forwardGeocode({
+//         query: 'Paris, France',
+//         limit: 1
+//     }).send()
+//     console.log(geoData.body.features[0].geometry)
+//     res.send("Ok")
+
+// })
+
+
 //create a new camp for a user
 router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
     //user ObjectId from locals
     const userId=res.locals.userId;
     const campBody: CreateCampBodyType= req.body
+    const geoData=await geocoder.forwardGeocode({
+        query: campBody.campLocation,
+        limit: 1
+    }).send()
+    const geometry=geoData.body.features[0].geometry
     try{
-        //body has the first 4 + user + reviewsOnCamp will be empty when the camp is created
-        const camp= await Camp.create({...campBody, user:userId})
+        //body has the first 4 + user + geometry + reviewsOnCamp will be empty when the camp is created
+        const camp= await Camp.create({...campBody, user:userId, geometry})
         if(!camp){
             console.log("Camp not created")
             throw new Error("Camp not created")
@@ -143,11 +165,25 @@ router.put("/:campId",UserAuthenticationMiddleware, UpdateCampValidationMiddlewa
     const campId=req.params.campId;
     const campBody: UpdateCampBodyType=req.body
     try{
-        const camp=await Camp.findByIdAndUpdate(campId,{...campBody})
+        const camp = await Camp.findById(campId);
         if(!camp){
             console.log("Camp not found")
             throw new Error("Camp not found")
         }  
+
+        //If location is updated, geometry should also update for updated map display
+        if(campBody.campLocation){
+            const geoData=await geocoder.forwardGeocode({
+                query: campBody.campLocation,
+                limit: 1
+            }).send()
+            const geometry= geoData.body.features[0].geometry
+            await Camp.findByIdAndUpdate(campId,{...campBody,geometry})
+        }
+        //else geometry shouldnt be touched
+        else{
+            await Camp.findByIdAndUpdate(campId,{...campBody})
+        }
         res.json({
             message: "Camp updated successfully"
         })

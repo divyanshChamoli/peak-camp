@@ -28,6 +28,10 @@ export interface Camp{
     campLocation: string,
     campPrice: number,
     campImageUrl: string,
+    geometry: {
+        type: 'Point',
+        coordinates: number[]
+    }
     reviewsOnCamp: Types.ObjectId[]
     user: Types.ObjectId
     //image
@@ -99,6 +103,17 @@ const CampSchema=new Schema<Camp>({
         type: String,
         required: true,
         trim: true
+    },
+    geometry: {
+        type: {
+          type: String, 
+          enum: ['Point'], 
+          required: true
+        },
+        coordinates: {
+          type: [Number],
+          required: true
+        }
     },
     reviewsOnCamp:[{
         type: Schema.Types.ObjectId,

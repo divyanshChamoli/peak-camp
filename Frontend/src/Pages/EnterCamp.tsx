@@ -1,11 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import AllReviews from "../Components/AllReviews";
 import EnterCampCard from "../Components/EnterCampCard";
-// import Campground from "../Components/Campground";
-// import CampgroundCard from "../Components/CampgroundCard";
-import Map from "../Components/Map";
-import Button from "../Components/Button";
 import NavBar from "../Components/Navbar";
+import Map from "../Components/Map";
 
 type RouteParams = {
     campId : string
@@ -22,18 +19,6 @@ export default function EnterCamp(){
     }
     
     return(
-        // <div className="w-screen flex justify-center pt-40 ">
-        //     <div className="w-2/3 grid gap-8">
-        //         <div className="bg-primary rounded-sm ">
-        //             <EnterCampCard campId={campId} />
-        //         </div>
-        //         <div className="">
-        //             <AllReviews campId={campId} /> 
-        //         </div>
-        //     </div>
-        // </div>
-
-        // DONT DELETE FOR NOW!!!
         <div className=" overflow-x-hidden ">
             <div className="static w-full">
                 <NavBar/>
@@ -43,8 +28,8 @@ export default function EnterCamp(){
                     <div className="bg-primary col-span-2 shadow-md shadow-black rounded-md">
                         <EnterCampCard campId={campId} />
                     </div>
-                    <div className=" bg-[#E5E3DF] rounded-sm col-span-1 flex justify-center items-center h-[20rem] border-white shadow-md object-cover" >
-                        <Map/>
+                    <div className=" bg-[#E5E3DF] rounded-sm col-span-1 flex h-[40rem] border-white shadow-md object-cover" >
+                        <Map campId={campId} />
                     </div>
                     <div className="col-span-2 shadow-md shadow-black rounded-md mb-8">
                         <AllReviews campId={campId} /> 

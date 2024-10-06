@@ -3,11 +3,21 @@
 
 @tailwind base;
 
+/* mapbox styled directly through the use of classes they defined, style={{}}, tailwind styling doesnt work on them */
+.mapboxgl-popup-close-button{
+  color: black;
+  padding-right: 5px;
+}
+ .mapboxgl-ctrl-attrib{
+  display: none
+ }
+
 @layer base {
     html {
       @apply text-white;
     } 
 }
+
 
 @tailwind components;
 @tailwind utilities;

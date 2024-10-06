@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Link, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import IntroductionPage from "./Pages/IntroductionPage"
 import HomePage from "./Pages/HomePage"
 import ErrorPage from "./Pages/ErrorPage"
@@ -29,7 +29,6 @@ function App() {
           <Route path="/createcamp" element={<CreateCampground/>}/>
           <Route path="/entercamp/:campId" element={<EnterCamp/>}/>
           <Route path="/createreview/:campId" element={<CreateReview/>}/>
-
         </Routes>
       </BrowserRouter>      
     </div>
