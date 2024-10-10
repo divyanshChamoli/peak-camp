@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Heading from "../Components/Heading";
 import InputBox from "../Components/InputBox";
 import TextArea from "../Components/TextArea";
@@ -6,12 +6,22 @@ import axios from "axios";
 import Button from "../Components/Button";
 import NavBar from "../Components/Navbar";
 import { ChevronLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InputFile from "../Components/InputFile";
 
-export default function CreateCampground() {
-  const navigate = useNavigate();
+type RouteParams = {
+    campId : string
+}
 
+export default function UpdateCampground() {
+    const navigate= useNavigate()
+    const {campId} = useParams<RouteParams>();
+
+    //campId doesnt exist, necessary hack otherwise TS assumes campId can be string | undefined
+    if(!campId){
+        navigate("/home")
+        return <></>
+    }
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
@@ -67,13 +77,34 @@ export default function CreateCampground() {
     // setImageUrl("");
   };
 
+  useEffect(()=>{
+    async function getCampData(){
+        try{
+            const res = await axios.get(`http://localhost:3000/camp/${campId}`,{
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem("token")
+                }
+            })
+            const campData = res.data.camp
+            setName(campData.campName)
+            setDescription(campData.campDescription)
+            setPrice(campData.campPrice)
+            setLocation(campData.campLocation)
+        }
+        catch(e){
+            throw new Error("Cannot get camp data")
+        }
+    }
+    getCampData()
+  },[])
+
   return (
     <div className=" bg-customYellow pb-10">
       <NavBar />
       <div className="flex justify-center items-center mt-6">
         <div className="h-[75%] w-1/2 bg-primary shadow-md shadow-black rounded-md">
           <div className="p-6">
-            <Heading label="Add Campground" />
+            <Heading label="Edit Campground" />
             <InputBox
             label="Name"
             placeholder="Name of the campground"
@@ -121,7 +152,7 @@ export default function CreateCampground() {
               size={"icon"}
               onClick={onClick}
             >
-              Add Campground!
+              Update Campground!
             </Button>
             <Button size={"iconSmall"} onClick={() => navigate("/home")}>
               <ChevronLeft size={15} /> Back

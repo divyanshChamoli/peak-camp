@@ -1,4 +1,4 @@
-import { Schema, model, connect, Types } from "mongoose"
+import { Schema, model, Types } from "mongoose"
 const mongoose = import("mongoose")
 
 export const connectToDB=async ()=>{
@@ -27,14 +27,17 @@ export interface Camp{
     campDescription: string,
     campLocation: string,
     campPrice: number,
-    campImageUrl: string,
+    // campImageUrl: string,
+    images: {
+        fileName: string,
+        url: string 
+    }[],
     geometry: {
         type: 'Point',
         coordinates: number[]
     }
     reviewsOnCamp: Types.ObjectId[]
     user: Types.ObjectId
-    //image
 }
 
 export interface Review{
@@ -99,11 +102,11 @@ const CampSchema=new Schema<Camp>({
         type: Number,
         required: true,
     },
-    campImageUrl: { 
-        type: String,
-        required: true,
-        trim: true
-    },
+    // campImageUrl: { 
+    //     type: String,
+    //     required: true,
+    //     trim: true
+    // },
     geometry: {
         type: {
           type: String, 
@@ -115,6 +118,18 @@ const CampSchema=new Schema<Camp>({
           required: true
         }
     },
+    images: [
+        {
+            fileName: {
+                type: String,
+                required: true
+            },
+            url: {
+                type: String,
+                required: true
+            }
+        }
+    ],
     reviewsOnCamp:[{
         type: Schema.Types.ObjectId,
         ref: "Review", 

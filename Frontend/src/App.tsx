@@ -10,6 +10,7 @@ import UpdateProfile from "./Pages/UpdateProfile"
 import CreateCampground from "./Pages/CreateCampground"
 import EnterCamp from "./Pages/EnterCamp"
 import CreateReview from "./Pages/CreateReview"
+import UpdateCampground from "./Pages/UpdateCampground"
 
 
 function App() {  
@@ -29,6 +30,7 @@ function App() {
           <Route path="/createcamp" element={<CreateCampground/>}/>
           <Route path="/entercamp/:campId" element={<EnterCamp/>}/>
           <Route path="/createreview/:campId" element={<CreateReview/>}/>
+          <Route path="/edit/:campId" element={<UpdateCampground/>}/>
         </Routes>
       </BrowserRouter>      
     </div>

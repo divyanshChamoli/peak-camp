@@ -6,6 +6,7 @@
 /* mapbox styled directly through the use of classes they defined, style={{}}, tailwind styling doesnt work on them */
 .mapboxgl-popup-close-button{
   color: black;
+  padding-left: 5px;
   padding-right: 5px;
 }
  .mapboxgl-ctrl-attrib{

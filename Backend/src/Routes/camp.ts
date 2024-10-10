@@ -8,6 +8,9 @@ import Geocoding from "@mapbox/mapbox-sdk/services/geocoding";
 const mapBoxAccessToken = "pk.eyJ1IjoiZGl2eWFuc2gwMDgiLCJhIjoiY2xnMmtrNm50MDBlajNscXlmbTJzdHl1MCJ9.-UvFiDZ4Z83OYJ9y3mZYew"
 const geocoder = Geocoding({accessToken: mapBoxAccessToken})
 
+import multer from "multer"
+import {storage} from "../cloudinary"
+const upload = multer({ storage })
 
 const router=Router()
 
@@ -31,42 +34,59 @@ const router=Router()
 
 // })
 
+router.post("/",upload.array('images', 5) ,(req,res)=>{
 
-//create a new camp for a user
-router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
-    //user ObjectId from locals
-    const userId=res.locals.userId;
-    const campBody: CreateCampBodyType= req.body
-    const geoData=await geocoder.forwardGeocode({
-        query: campBody.campLocation,
-        limit: 1
-    }).send()
-    const geometry=geoData.body.features[0].geometry
-    try{
-        //body has the first 4 + user + geometry + reviewsOnCamp will be empty when the camp is created
-        const camp= await Camp.create({...campBody, user:userId, geometry})
-        if(!camp){
-            console.log("Camp not created")
-            throw new Error("Camp not created")
+    const files = req.files as Express.Multer.File[]
+    const images =  files.map((image)=>{
+        return{
+            url: image.path,
+            fileName: image.filename
         }
-        const user=await User.findByIdAndUpdate(userId,{
-            $push: {campsCreated: camp}
-        })
-        if(!user){
-            console.log("User not found")
-            throw new Error("User not found")
-        }
-        res.json({
-            message: "Successfully created Camp"
-        })
-    }
-    catch(err){
-        console.log(err)
-        res.json({
-            Error :"Error"
-        })
-    }
+    })
+    console.log(images)
+    res.json({
+        body: req.body,
+        file: req.files
+    })
+
 })
+
+
+// //create a new camp for a user
+// router.post('/',UserAuthenticationMiddleware, CreateCampValidationMiddleware, async (req:Request, res:Response)=>{
+//     //user ObjectId from locals
+//     const userId=res.locals.userId;
+//     const campBody: CreateCampBodyType= req.body
+//     const geoData=await geocoder.forwardGeocode({
+//         query: campBody.campLocation,
+//         limit: 1
+//     }).send()
+//     const geometry=geoData.body.features[0].geometry
+//     try{
+//         //body has the first 4 + user + geometry + reviewsOnCamp will be empty when the camp is created
+//         const camp= await Camp.create({...campBody, user:userId, geometry})
+//         if(!camp){
+//             console.log("Camp not created")
+//             throw new Error("Camp not created")
+//         }
+//         const user=await User.findByIdAndUpdate(userId,{
+//             $push: {campsCreated: camp}
+//         })
+//         if(!user){
+//             console.log("User not found")
+//             throw new Error("User not found")
+//         }
+//         res.json({
+//             message: "Successfully created Camp"
+//         })
+//     }
+//     catch(err){
+//         console.log(err)
+//         res.json({
+//             Error :"Error"
+//         })
+//     }
+// })
 
 // get all camps
 router.get('/', async (req:Request, res:Response)=>{

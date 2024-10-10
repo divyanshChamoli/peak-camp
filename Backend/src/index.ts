@@ -1,7 +1,8 @@
 import { Express } from "express"
+// import 'dotenv/config'
+require('dotenv').config()
 const express= require("express")
 const cors=require("cors")
-
 const campRouter=require("./Routes/camp")
 const userRouter=require("./Routes/user")
 const reviewRouter=require("./Routes/review")
