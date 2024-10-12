@@ -2,8 +2,9 @@ import { Schema, model, Types } from "mongoose"
 const mongoose = import("mongoose")
 
 export const connectToDB=async ()=>{
+    const MONGODB_CONNECTION_STRING = process.env.MONGODB_CONNECTION_STRING as string
     try{
-        (await mongoose).connect("mongodb+srv://divyanshchamoli:wxvn7144@cluster0.qrzriqj.mongodb.net/camping-webapp")
+        (await mongoose).connect(MONGODB_CONNECTION_STRING)
         console.log("DB connected")
     }
     catch(err){
@@ -27,7 +28,6 @@ export interface Camp{
     campDescription: string,
     campLocation: string,
     campPrice: number,
-    // campImageUrl: string,
     images: {
         fileName: string,
         url: string 
@@ -102,11 +102,6 @@ const CampSchema=new Schema<Camp>({
         type: Number,
         required: true,
     },
-    // campImageUrl: { 
-    //     type: String,
-    //     required: true,
-    //     trim: true
-    // },
     geometry: {
         type: {
           type: String, 

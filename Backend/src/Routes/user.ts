@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { User } from "../db";
-import { HttpStatusCode, JWT_SECRET } from "../utils";
+import { HttpStatusCode } from "../utils";
 import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationMiddleware";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
@@ -40,6 +40,7 @@ router.post("/signup",SignupBodyValidationMiddleware ,async (req: Request, res: 
 //signin user
 router.post("/signin",SigninBodyValidationMiddleware,async (req:Request, res:Response )=>{
     const {username, password}=req.body
+    const JWT_SECRET = process.env.JWT_SECRET as string
     try{
         const foundUser=await User.findOne({username})
         if(!foundUser){
@@ -51,7 +52,7 @@ router.post("/signin",SigninBodyValidationMiddleware,async (req:Request, res:Res
             throw new Error("User password is incorrect")
         }
         const userId=foundUser._id.toString()
-        const JWTtoken=jwt.sign({userId},JWT_SECRET)
+        const JWTtoken=jwt.sign({userId}, JWT_SECRET)
         res.json({
             message: "Signin successfull",
             token: JWTtoken

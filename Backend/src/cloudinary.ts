@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from 'cloudinary';
-import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 cloudinary.config({ 
@@ -8,8 +7,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET 
 });
  
-// export const cloudinary = cloudinary
-
 export const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
@@ -19,7 +16,4 @@ export const storage = new CloudinaryStorage({
       allowed_formats: ['jpeg', 'jpg', 'png', 'svg'],
     };
   },
-});
- 
-const parser = multer({ storage: storage });
- 
+}); 

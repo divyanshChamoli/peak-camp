@@ -4,7 +4,6 @@ import { HttpStatusCode } from "../utils";
 
 export const CreateCampValidationMiddleware=(req: Request, res: Response, next: NextFunction): void=>{
     const campData =req.body 
-    
     //Since we are using FormData, convert campPrice datatype to number
     if(campData.campPrice){
         campData.campPrice = parseInt(campData.campPrice)
@@ -15,6 +14,6 @@ export const CreateCampValidationMiddleware=(req: Request, res: Response, next: 
             message: "Invalid inputs"
         })
         return;
-    }
+    }   
     next()
 }

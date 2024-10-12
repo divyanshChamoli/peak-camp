@@ -8,4 +8,4 @@ export enum HttpStatusCode{
     TOO_MANY_REQUESTS = 429,
 }
 
-export const JWT_SECRET="divyansh_server"
+// export const JWT_SECRET="divyansh_server"

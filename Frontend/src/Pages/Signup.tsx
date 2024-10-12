@@ -1,8 +1,9 @@
 import InputBoxSquare from "../Components/InputBoxSquare";
 import { NavLink, useNavigate } from "react-router-dom";
-import ButtonCreateAccount from "../Components/Button/ButtonCreateAccount";
 import { useState } from "react";
 import axios from "axios";
+import { ChevronRight } from "lucide-react";
+import Button from "../Components/Button";
 
 export default function Signup(){
     const [firstName, setFirstName]= useState("")
@@ -53,7 +54,12 @@ export default function Signup(){
                     <InputBoxSquare placeholder="Password" value={password} type="password" onChange={(e)=>setPassword(e.target.value)} />
                 </div>
                 <div className=" sm:col-span-2">
-                    <ButtonCreateAccount placeholder="Create New Account" onClick={onClick} />
+                    <Button
+                    className="w-full rounded-sm mb-3 text-sm p-3"
+                    onClick={onClick}
+                    >
+                        Create New Account <ChevronRight size={18}/>
+                    </Button>
                 </div>
                 <div className=" w-full sm:col-span-2 text-center ">
                     Already have an account? <NavLink className={"text-yellow underline"} to={"/signin"}>Login</NavLink>

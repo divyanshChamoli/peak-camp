@@ -17,7 +17,7 @@ export default function UpdateCampground() {
     const navigate= useNavigate()
     const {campId} = useParams<RouteParams>();
 
-    //campId doesnt exist, necessary hack otherwise TS assumes campId can be string | undefined
+    //campId doesnt exist, necessary hack; otherwise TS assumes campId can be string | undefined
     if(!campId){
         navigate("/home")
         return <></>
@@ -26,7 +26,6 @@ export default function UpdateCampground() {
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
-  //   const [imageUrl, setImageUrl] = useState("");
   const [images, setImages] = useState<FileList | null>(null);  
 
   const onClick = async () => {
@@ -43,18 +42,9 @@ export default function UpdateCampground() {
       campData.append("campDescription", description);
       campData.append("campLocation", location);
       campData.append("campPrice", price.toString());
-      // imageData.append('campImageUrl',imageUrl)
 
-      const res = await axios.post(
-        "http://localhost:3000/camp",
-        // {
-        //   campName: name,
-        //   campDescription: description,
-        //   campLocation: location,
-        //   campPrice: price,
-        //   campImageUrl: imageUrl,
-        //   imageData
-        // },
+      const res = await axios.put(
+        `http://localhost:3000/camp/${campId}`,
         campData,
         {
           headers: {
@@ -63,18 +53,18 @@ export default function UpdateCampground() {
           },
         }
       );
-      //   if (!res.data.Error) {
-      //     navigate("/home");
-      //   }
+
+      if (!res.data.Error) {
+          navigate("/home");
+      }
     } catch (e) {
       alert("Error!, Please try again");
       console.log(e);
     }
-    // setDescription("");
-    // setName("");
-    // setLocation("");
-    // setPrice(0);
-    // setImageUrl("");
+    setDescription("");
+    setName("");
+    setLocation("");
+    setPrice(0);
   };
 
   useEffect(()=>{

@@ -6,15 +6,21 @@ interface EnterCampCardProps {
   campId: string;
 }
 
-interface Camp {
-  campName: string;
-  campDescription: string;
-  campLocation: string;
-  campPrice: number;
-  campImageUrl: string;
-  user: string;
-  // reviewsOnCamp: Types.ObjectId[]
-  //image
+interface Camp{
+  campName: string,
+  campDescription: string,
+  campLocation: string,
+  campPrice: number,
+  images: {
+      fileName: string,
+      url: string 
+  }[],
+  geometry: {
+      type: 'Point',
+      coordinates: number[]
+  }
+  reviewsOnCamp: string[]
+  user: string
 }
 
 export default function EnterCampCard({ campId }: EnterCampCardProps) {
@@ -37,23 +43,19 @@ export default function EnterCampCard({ campId }: EnterCampCardProps) {
   return (
     <div>
       <figure className="p-4">
-        {/* <img className="object-cover"  src={camp?.campImageUrl} alt={camp?.campName} /> */}
         <Carousel transition={{duration: 1}} autoplay={true} loop={true} className="rounded-xl">
-          <img
-            src={camp?.campImageUrl}
-            alt="image 1"
-            className="h-full w-full object-cover"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-            alt="image 2"
-            className="h-full w-full object-cover"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-            alt="image 3"
-            className="h-full w-full object-cover"
-          />
+          {
+            camp?.images.map((image)=>{
+              return(
+                <img
+                  src={image.url}
+                  alt={`Camping images`}
+                  key={image.fileName}
+                  className="h-full w-full object-cover"
+                />
+              )
+            })
+          }
         </Carousel>
         <figcaption className=" text-white text-xl text-right font-montserrat pt-2">
           {" "}
