@@ -1,5 +1,5 @@
 import { Router,Request,Response } from "express";
-import { Camp, User } from "../db";
+import { Camp, Review, User } from "../db";
 import { UserAuthenticationMiddleware } from "../Middlewares/UserAuthenticationMiddleware";
 import { CreateCampValidationMiddleware } from "../Middlewares/CreateCampValidationMiddleware";
 import { UpdateCampValidationMiddleware } from "../Middlewares/UpdateCampValidationMiddleware";
@@ -27,20 +27,21 @@ router.post('/', UserAuthenticationMiddleware, upload.array('images', 10), Creat
         }
     })
     
-    const geoData=await geocoder.forwardGeocode({
-        query: campBody.campLocation,
-        limit: 1
-    }).send()
-
-    //When a location that doesnt exist is entered, geoData.body.features array is empty=> there is no features[0]
-    if(geoData.body.features.length === 0){
-        console.log("Features not defined")
-        res.json({
-            Error: "Invalid location"
-        })
-    }
-    const geometry=geoData.body.features[0].geometry
     try{
+        const geoData=await geocoder.forwardGeocode({
+            query: campBody.campLocation,
+            limit: 1
+        }).send()
+    
+        //When a location that doesnt exist is entered, geoData.body.features array is empty=> there is no features[0]
+        if(geoData.body.features.length === 0){
+            console.log("Features not defined")
+            res.json({
+                Error: "Invalid location"
+            })
+        }
+        const geometry=geoData.body.features[0].geometry
+        
         //body has the first 4 + user + geometry + images + reviewsOnCamp will be empty when the camp is created
         const camp= await Camp.create({...campBody, user:userId, geometry, images})
         if(!camp){
@@ -135,16 +136,34 @@ router.get(("/camps/:userId"), async (req:Request, res:Response)=>{
     }
 })
 
-//delete a camp
+//delete a camp: 1) Delete camp 2) Delete campId from campsCreated from User 3) Delete all reviews created on that camp from Review 
 //can create a CampAuthorizationMiddleware to check if this camp belongs to the user logged in
-router.delete(":campId",UserAuthenticationMiddleware ,async (req: Request, res: Response)=>{
+router.delete("/:campId",UserAuthenticationMiddleware ,async (req: Request, res: Response)=>{
+    const userId=res.locals.userId
     const campId=req.params.campId;
     try{
-        const deletedCamp=await Camp.findByIdAndDelete(campId)
-        if(!deletedCamp){
+        const camp=await Camp.findById(campId)
+        if(!camp){
             console.log("Camp not found")
             throw new Error("Camp not found")
         }
+        if(camp.user.toString() !== userId){
+            console.log("User is not authorized to delete camp")
+            throw new Error("User is not authorized to delete camp")
+        }
+        
+        // Delete camp
+        await Camp.findByIdAndDelete(campId)
+
+        //Delete from User
+        await User.findByIdAndUpdate(userId,
+            {$pullAll: { campsCreated: [campId] } },
+            {new: true}
+        )        
+
+        //Delete all reviews on that camp
+        await Review.deleteMany({camp: campId})
+                
         res.json({
             message: "Camp deleted successfully"
         })
@@ -152,7 +171,7 @@ router.delete(":campId",UserAuthenticationMiddleware ,async (req: Request, res: 
     catch(err){
         console.log(err)
         res.json({
-            message: "Error"
+            Error: err
         })
     }
 })

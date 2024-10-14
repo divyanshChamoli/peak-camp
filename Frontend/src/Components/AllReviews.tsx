@@ -65,7 +65,7 @@ export default function AllReviews({campId} : AllReviewsProps){
             <hr className="pb-2"/>
             {reviews.map((review)=>{
                 return(
-                    <Review key={review._id} rating={review.rating} reviewText={review.reviewText} userId={review.user} />
+                    <Review key={review._id} rating={review.rating} reviewText={review.reviewText} userId={review.user} reviewId={review._id} />
                 )
             })}
         </div>

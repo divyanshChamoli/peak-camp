@@ -64,15 +64,43 @@ router.get("/:campId",async (req: Request, res: Response)=>{
     }
 })
 
-//delete review
+//delete review: !) delete review 2) delete review from Camp 3) delete review from User
 router.delete("/:reviewId",UserAuthenticationMiddleware ,async (req: Request, res: Response)=>{
     const reviewId=req.params.reviewId;
+    const userId=res.locals.userId;
     try{
-        const deletedReview=await Review.findByIdAndDelete(reviewId)
-        if(!deletedReview){
+        const review=await Review.findById(reviewId)
+        if(!review){
             console.log("Review not found")
             throw new Error("Review not found")
         }
+        if(review.user.toString() !== userId){
+            console.log("User is not authorized to delete review")
+            throw new Error("User is not authorized to delete review")
+        }
+
+        const campId = review.camp.toString()
+
+        //Delete review
+        const deletedReview = await Review.findByIdAndDelete(reviewId)
+
+        //Delete review from Camp
+        const deletedCamp = await Camp.findByIdAndUpdate(campId,
+            { $pullAll: { reviewsOnCamp : [reviewId] } }, 
+            { new: true }, 
+        )
+        
+        //Delete review from User
+        const deletedUser = await User.findByIdAndUpdate(userId,
+            { $pullAll: { reviewsCreated : [reviewId] } }, 
+            { new: true }, 
+        )
+        // const deletedUser = await User.findByIdAndUpdate(userId,{
+        //     $pull: {
+        //         reviewsCreated: {_id : reviewId}
+        //     }
+        // })
+        
         res.json({
             message: "Review deleted successfully"
         })
@@ -80,7 +108,7 @@ router.delete("/:reviewId",UserAuthenticationMiddleware ,async (req: Request, re
     catch(err){
         console.log(err)
         res.json({
-            message: "Error"
+            Error: "Error"
         })
     }
 })

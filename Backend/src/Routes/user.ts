@@ -90,7 +90,6 @@ router.get("/users",async (req: Request, res: Response)=>{
 
 router.get("/:userId",async (req: Request, res: Response)=>{
     const userId=req.params.userId
-    console.log(userId)
     try{
         const user=await User.findById(userId);
         if(!user){

@@ -1,6 +1,9 @@
 import { Carousel } from "@material-tailwind/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Button from "./Button";
+import { SquarePen, Trash } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface EnterCampCardProps {
   campId: string;
@@ -24,6 +27,8 @@ interface Camp{
 }
 
 export default function EnterCampCard({ campId }: EnterCampCardProps) {
+  const navigate =  useNavigate()
+  
   const [camp, setCamp] = useState<Camp>();
   const [firstName, setFirstName] = useState("");
 
@@ -40,8 +45,25 @@ export default function EnterCampCard({ campId }: EnterCampCardProps) {
     getData();
   }, []);
 
+  const handleDelete=async ()=>{
+    try{
+      const res= await axios.delete(`http://localhost:3000/camp/${campId}`,{
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
+      if(!res.data.Error){
+        navigate("/home")
+      }
+    }
+    catch(err){
+      console.log(err)
+      alert("Something went wrong")
+    }
+  }
+  
   return (
-    <div>
+    <div className="relative">
       <figure className="p-4">
         <Carousel transition={{duration: 1}} autoplay={true} loop={true} className="rounded-xl">
           {
@@ -69,11 +91,21 @@ export default function EnterCampCard({ campId }: EnterCampCardProps) {
           {" "}
           {camp?.campDescription}{" "}
         </figcaption>
-        <figcaption className=" text-white text-sm text-right">
-          {" "}
-          Submitted by{" "}
-          <span className="underline capitalize  ">{firstName}</span>{" "}
-        </figcaption>
+        <div className="flex justify-between items-center">
+          <div className="flex gap-3">
+            <Button size={"icon"} className="bg-green-700 hover:bg-green-900" onClick={()=>navigate(`/edit/${campId}`)}>
+                Edit &nbsp; <SquarePen size={18}/>
+            </Button>
+            <Button size={"icon"} className="bg-red-600 hover:bg-red-900" onClick={handleDelete}>
+                Delete &nbsp; <Trash size={18}/>
+            </Button>
+          </div>
+          <figcaption className=" text-white text-sm ">
+            {" "}
+            Submitted by{" "}
+            <span className="underline capitalize  ">{firstName}</span>{" "}
+          </figcaption>
+        </div>
       </figure>
     </div>
   );

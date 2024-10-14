@@ -43,17 +43,17 @@ export default function CreateCampground() {
           },
         }
       );
-        if (!res.data.Error) {
-          navigate("/home");
-        }
+      if (!res.data.Error) {
+        navigate("/home");
+      }
+      setDescription("");
+      setName("");
+      setLocation("");
+      setPrice(0);
     } catch (e) {
       alert("Error!, Please try again");
       console.log(e);
     }
-    setDescription("");
-    setName("");
-    setLocation("");
-    setPrice(0);
   };
 
   return (
@@ -92,11 +92,11 @@ export default function CreateCampground() {
 
             {/* Send file input */}
             <InputFile 
-            onChange={(e) =>{ 
+              onChange={(e) =>{ 
                 setImages(e.target.files)
                 console.log(images)
                 }
-            }
+              }
             />
             <TextArea
             label="Description"

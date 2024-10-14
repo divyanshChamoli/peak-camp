@@ -55,16 +55,16 @@ export default function UpdateCampground() {
       );
 
       if (!res.data.Error) {
-          navigate("/home");
+        navigate(`/enterCamp/${campId}`);
       }
+      setDescription("");
+      setName("");
+      setLocation("");
+      setPrice(0);
     } catch (e) {
       alert("Error!, Please try again");
       console.log(e);
     }
-    setDescription("");
-    setName("");
-    setLocation("");
-    setPrice(0);
   };
 
   useEffect(()=>{
