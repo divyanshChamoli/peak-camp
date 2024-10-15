@@ -1,16 +1,22 @@
 import InputBoxSquare from "../Components/InputBoxSquare";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import Button from "../Components/Button";
 import { ChevronRight } from "lucide-react";
+import { useAuth } from "../Context/AuthProvider";
 
-export default function Signin(){
+export default function Signin(){    
+    
+    const {setAuthToken, setCurrentUserId} = useAuth()
+    
     const [password, setPassword]= useState("")
     const [email, setEmail]= useState("")
-
-    const navigate = useNavigate()
     
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/"
+        
     const onClick=async ()=>{
         try{
             const res=await axios.post("http://localhost:3000/user/signin",{
@@ -19,18 +25,20 @@ export default function Signin(){
             })
             if(res.data.token){
                 localStorage.setItem("token", res.data.token)
+                setAuthToken(res.data.token)
+                setCurrentUserId(res.data.userId)
             }
-            if(!res.data.Error){
-                // alert("Welcome to PeakCamp!")
-                navigate("/home")
-            }
+            // if(!res.data.Error){
+            //     // alert("Welcome to PeakCamp!")
+            // }
+            setEmail("")
+            setPassword("")
+            navigate(from, {replace: true})
         }
         catch(e){
             alert("Error! Please try again")
             console.log(e)
         }
-        setEmail("")
-        setPassword("")
     }
 
     return(

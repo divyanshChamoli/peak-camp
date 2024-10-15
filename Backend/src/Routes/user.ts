@@ -55,7 +55,8 @@ router.post("/signin",SigninBodyValidationMiddleware,async (req:Request, res:Res
         const JWTtoken=jwt.sign({userId}, JWT_SECRET)
         res.json({
             message: "Signin successfull",
-            token: JWTtoken
+            token: JWTtoken,
+            userId: userId
         })
     }
 
