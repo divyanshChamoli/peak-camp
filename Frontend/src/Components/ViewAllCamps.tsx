@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../api/axios";
 import ViewSingleCamp from "./ViewSingleCamp";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ export default function ViewAllCamps(){
     const [camps, setCamps] = useState<Camp[]>([])            
 
     useEffect(()=>{
-        axios.get("http://localhost:3000/camp")
+        axios.get("/camp")
         .then((res)=>{
             setCamps(res.data.camps)
         })

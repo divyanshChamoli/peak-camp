@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import ReactMapGL, { FullscreenControl, Marker, NavigationControl, Popup } from "react-map-gl"
 import { Tent } from "lucide-react"
-import axios from "axios"
+import axios from "../api/axios";
 
 const mapBoxAccessToken = "pk.eyJ1IjoiZGl2eWFuc2gwMDgiLCJhIjoiY2xnMmtrNm50MDBlajNscXlmbTJzdHl1MCJ9.-UvFiDZ4Z83OYJ9y3mZYew"
 
@@ -33,7 +33,7 @@ export default function Map({campId}: MapProps){
     
     useEffect(()=>{
         async function fetchCampData(){
-            const response= await axios.get(`http://localhost:3000/camp/${campId}`)
+            const response= await axios.get(`/camp/${campId}`)
             setCamp(response.data.camp)
             setLoading(false)
         }

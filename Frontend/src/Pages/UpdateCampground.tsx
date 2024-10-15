@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Heading from "../Components/Heading";
 import InputBox from "../Components/InputBox";
 import TextArea from "../Components/TextArea";
-import axios from "axios";
+import axios from "../api/axios";
 import Button from "../Components/Button";
 import NavBar from "../Components/Navbar";
 import { ChevronLeft } from "lucide-react";
@@ -44,7 +44,7 @@ export default function UpdateCampground() {
       campData.append("campPrice", price.toString());
 
       const res = await axios.put(
-        `http://localhost:3000/camp/${campId}`,
+        `/camp/${campId}`,
         campData,
         {
           headers: {
@@ -70,7 +70,7 @@ export default function UpdateCampground() {
   useEffect(()=>{
     async function getCampData(){
         try{
-            const res = await axios.get(`http://localhost:3000/camp/${campId}`,{
+            const res = await axios.get(`/camp/${campId}`,{
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem("token")
                 }

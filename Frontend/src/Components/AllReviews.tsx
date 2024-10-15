@@ -2,8 +2,8 @@ import { Pencil } from "lucide-react";
 import Button from "./Button";
 import Review from "./Review";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axios from "../api/axios";
 import DisplayAverageRating from "./DisplayAverageRating";
 
 interface AllReviewsProps{
@@ -39,7 +39,7 @@ export default function AllReviews({campId} : AllReviewsProps){
     }
     
     useEffect(()=>{
-        axios.get(`http://localhost:3000/review/${campId}`)
+        axios.get(`/review/${campId}`)
         .then((res)=>{
             setReviews(res.data.reviews)
         })

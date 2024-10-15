@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import ReactMapGL, { Marker, NavigationControl, Popup, FullscreenControl} from "react-map-gl"
 import { Tent } from "lucide-react"
-import axios from "axios"
+import axios from "../api/axios";
 
 const mapBoxAccessToken = "pk.eyJ1IjoiZGl2eWFuc2gwMDgiLCJhIjoiY2xnMmtrNm50MDBlajNscXlmbTJzdHl1MCJ9.-UvFiDZ4Z83OYJ9y3mZYew"
 
@@ -23,7 +23,7 @@ interface Camp{
 
 export default function MapGlobe(){
 
-    const [viewPort, setViewPort] = useState({
+    const [viewPort] = useState({
         latitude: 28.5247,
         longitude:  77.1854,
         zoom: 3, 
@@ -37,7 +37,7 @@ export default function MapGlobe(){
 
     useEffect(()=>{
         async function fetchCampData(){
-            const response= await axios.get(`http://localhost:3000/camp/`)
+            const response= await axios.get(`/camp`)
             setCamps(response.data.camps)
             setLoading(false)
         }

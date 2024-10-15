@@ -2,7 +2,7 @@ import { useState } from "react";
 import Heading from "../Components/Heading";
 import InputBox from "../Components/InputBox";
 import TextArea from "../Components/TextArea";
-import axios from "axios";
+import axios from "../api/axios";
 import Button from "../Components/Button";
 import NavBar from "../Components/Navbar";
 import { ChevronLeft } from "lucide-react";
@@ -34,7 +34,7 @@ export default function CreateCampground() {
       campData.append("campPrice", price.toString());
 
       const res = await axios.post(
-        "http://localhost:3000/camp",
+        "/camp",
         campData,
         {
           headers: {

@@ -5,7 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Rating } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import NavBar from "../Components/Navbar";
 
 interface Camp{
@@ -23,7 +23,7 @@ export default function CreateReview(){
     
     const sendToBackend=async ()=>{
         try{
-            const res= await axios.post(`http://localhost:3000/review/${campId}`,{
+            const res= await axios.post(`/review/${campId}`,{
                 reviewText: description,
                 rating: rating
             },{
@@ -45,7 +45,7 @@ export default function CreateReview(){
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:3000/camp/${campId}`)
+        axios.get(`/camp/${campId}`)
         .then((res)=>{
             setCamp(res.data.camp)
         })

@@ -1,5 +1,5 @@
 import { Rating } from "@material-tailwind/react"
-import axios from "axios"
+import axios from "../api/axios";
 import { useEffect, useState } from "react"
 
 interface DisplayAverageRatingProps{
@@ -34,7 +34,7 @@ export default function DisplayAverageRating({campId} : DisplayAverageRatingProp
 
     useEffect(()=>{
         const getData=async()=>{
-            const res= await axios.get(`http://localhost:3000/review/${campId}`)
+            const res= await axios.get(`/review/${campId}`)
             setAverage(Math.ceil(calculateAverageRating(res.data.reviews))) 
         }
         getData()

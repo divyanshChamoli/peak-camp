@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 interface InputFileProps{
     onChange(e: React.ChangeEvent<HTMLInputElement>):void 

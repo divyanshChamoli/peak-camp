@@ -1,7 +1,7 @@
 import InputBoxSquare from "../Components/InputBoxSquare";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import Button from "../Components/Button";
 import { ChevronRight } from "lucide-react";
 import { useAuth } from "../Context/AuthProvider";
@@ -19,7 +19,7 @@ export default function Signin(){
         
     const onClick=async ()=>{
         try{
-            const res=await axios.post("http://localhost:3000/user/signin",{
+            const res=await axios.post("/user/signin",{
                 username: email,
                 password
             })

@@ -1,5 +1,5 @@
 import { Rating } from "@material-tailwind/react";
-import axios from "axios";
+import axios from "../api/axios";
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import { Trash } from "lucide-react";
@@ -23,15 +23,15 @@ export default function Review({
   const [fullName, setFullName] = useState("");
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/user/${userId}`).then((res) => {
+    axios.get(`/user/${userId}`).then((res) => {
       setFullName(res.data.user.firstName + " " + res.data.user.lastName);
     });
   }, [fullName]);
 
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(
-        `http://localhost:3000/review/${reviewId}`,
+       await axios.delete(
+        `/${reviewId}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),

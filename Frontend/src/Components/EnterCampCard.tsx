@@ -1,5 +1,6 @@
+
 import { Carousel } from "@material-tailwind/react";
-import axios from "axios";
+import axios from "../api/axios";
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import { SquarePen, Trash } from "lucide-react";
@@ -27,7 +28,7 @@ interface Camp {
   user: string;
 }
 
-export default function EnterCampCard({ campId }: EnterCampCardProps) {
+export default function EnterCampCard({ campId }: EnterCampCardProps) {  
   const { currentUserId } = useAuth();
   const navigate = useNavigate();
 
@@ -36,10 +37,10 @@ export default function EnterCampCard({ campId }: EnterCampCardProps) {
 
   useEffect(() => {
     async function getData() {
-      const response = await axios.get(`http://localhost:3000/camp/${campId}`);
+      const response = await axios.get(`/camp/${campId}`);
       setCamp(response.data.camp);
       const res = await axios.get(
-        `http://localhost:3000/user/${response.data.camp.user}`
+        `/user/${response.data.camp.user}`
       );
       setFirstName(res.data.user.firstName);
     }
@@ -49,7 +50,7 @@ export default function EnterCampCard({ campId }: EnterCampCardProps) {
 
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`http://localhost:3000/camp/${campId}`, {
+      const res = await axios.delete(`/camp/${campId}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
