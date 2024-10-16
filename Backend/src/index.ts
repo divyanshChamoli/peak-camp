@@ -21,6 +21,9 @@ app.use("/camp",campRouter)
 app.use("/user",userRouter)
 app.use("/review",reviewRouter)
 
+app.get('/',(req, res)=>{
+    res.send("Backend is up!")
+})
 
 app.listen(port,()=>{
     console.log("listening")
