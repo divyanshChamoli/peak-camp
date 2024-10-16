@@ -8,6 +8,8 @@ const userRouter=require("./Routes/user")
 const reviewRouter=require("./Routes/review")
 
 const app: Express=express()
+const port=process.env.PORT || 3000
+
 app.use(cors(
     {
         origin: ["https://peakcamp.vercel.app", "http://localhost:5173/"],
@@ -20,7 +22,7 @@ app.use("/user",userRouter)
 app.use("/review",reviewRouter)
 
 
-app.listen(3000,()=>{
+app.listen(port,()=>{
     console.log("listening")
 })
 
