@@ -31,7 +31,7 @@ export default function Review({
   const handleDelete = async () => {
     try {
        await axios.delete(
-        `/${reviewId}`,
+        `review/${reviewId}`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
