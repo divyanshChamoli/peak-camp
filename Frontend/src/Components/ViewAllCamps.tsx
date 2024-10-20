@@ -35,7 +35,7 @@ export default function ViewAllCamps(){
 
     return(
         <div className="w-screen flex justify-center pt-16  ">
-            <div className="grid grid-cols-2 gap-x-28 gap-y-12">
+            <div className="grid lg:grid-cols-2 gap-x-28 gap-y-12">
                 {camps.map((camp)=>{
                     return(
                         <ViewSingleCamp key={camp._id} campName={camp.campName} campImageUrl={camp.images[0].url}  
