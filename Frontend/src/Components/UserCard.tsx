@@ -6,7 +6,7 @@ interface UserCardProps {
   email: string;
 }
 
-export default function UserCard({ id, name, email }: UserCardProps) {
+export default function UserCard({ name, email }: UserCardProps) {
   let config;
   if(name === "Pranjali Negi"){
       config = genConfig({
